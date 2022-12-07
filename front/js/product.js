@@ -22,7 +22,7 @@ response.json()
     // Affichage produit API
 
     function theProducts(product) {
-    let colorOption = document.querySelector("#color");
+    let colorOption = document.querySelector("#colors");
     let name = document.querySelector("#title");
     let price = document.querySelector("#price");
     let imageUrl = document.querySelector("article div.item__img");
@@ -69,7 +69,7 @@ choiceColor.addEventListener("input", (ec) => {
 let quantityProduct;
 choiceQuantity.addEventListener("input", (eq) => {
   quantityProduct = eq.target.value;
-  customerItem.quantité = quantityProduct;
+  customerItem.quantity = quantityProduct;
   document.querySelector("#addToCart").style.color = "white";
   document.querySelector("#addToCart").textContent = "Ajouter au panier";
   console.log(quantityProduct);
@@ -102,7 +102,7 @@ choiceProduct.addEventListener("click", () => {
 });
 
         /* Déclaration variable +
-  On écoute ce qu'il se passe sur le bouton #addToCart pour faire l'action +
+  On écoute ce qu'il se passe sur le bouton #addToCart  +
   Conditions de validation du bouton ajouter au panier +
   Les valeurs sont créées au click, mais si il n'y a pas d'action sur la couleur et/ou la quantité, les valeurs sont "undefined" +
   Alerte informative pour les informations à renseigner + effet visuel d'ajout de produit +

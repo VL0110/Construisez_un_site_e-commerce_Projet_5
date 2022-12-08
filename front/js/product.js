@@ -146,8 +146,8 @@ function addOtherProduct() {
     if (a._id < b._id) return -1;
     if (a._id > b._id) return 1;
     if (a._id = b._id){
-      if (a.couleur < b.couleur) return -1;
-      if (a.couleur > b.couleur) return 1;
+      if (a.colors < b.colors) return -1;
+      if (a.colors > b.colors) return 1;
     }
     return 0;
   });
@@ -176,7 +176,7 @@ function Cart() {
         return (localStorage.stockCart = JSON.stringify(registeredProducts));
       }
     }
-    return "addOtherProduct"();
+    return addOtherProduct();
   }
   addFirstProduct ();
 }

@@ -108,7 +108,7 @@ choiceProduct.addEventListener("click", () => {
   Alerte informative pour les informations à renseigner + effet visuel d'ajout de produit +
   Si les données passent le contrôle le produit est ajouté  */ 
 
-// Déclaration des tableaux utiles (mutation)
+// Déclaration des tableaux (mutation)
 
 let customerProductChoice = [];
 let registeredProducts = [];
@@ -146,8 +146,8 @@ function addOtherProduct() {
     if (a._id < b._id) return -1;
     if (a._id > b._id) return 1;
     if (a._id = b._id){
-      if (a.colors < b.colors) return -1;
-      if (a.colors > b.colors) return 1;
+      if (a.color < b.color) return -1;
+      if (a.color > b.color) return 1;
     }
     return 0;
   });

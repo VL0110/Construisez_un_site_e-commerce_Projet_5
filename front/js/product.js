@@ -178,7 +178,7 @@ function Cart() {
     }
     return addOtherProduct();
   }
-  addFirstProduct ();
+  return addFirstProduct ();
 }
 
         /* Variable du local storage appelé "stockCart" et qu'on a convertit en JSon +

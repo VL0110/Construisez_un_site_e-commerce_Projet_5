@@ -13,7 +13,7 @@ if (page.match("cart")) {
 // Conditions d’affichage des produits du panier
 
     function cartDisplay (index) {
-        let cart = JSON.parse(localStorage.getItem("panierStocké"));
+        let cart = JSON.parse(localStorage.getItem("stockCart"));
          if (cart && cart.length != 0) {
           for (let choice of cart) {
             console.log(choice);
@@ -44,7 +44,7 @@ if (page.match("cart")) {
     On demande à "Display" de jouer avec les données panier, les données appelé ont un scope agrandi +
     Si il n'y à pas de panier on affiche un H1 informatif  */
 
-// Fonction détermine les conditions d’affichage des produits du panier
+// Fonction d'affichage d'un panier (tableau)
 
 function display(indexed) {
     let cartArea = document.querySelector("#cart__items");
@@ -62,7 +62,7 @@ function display(indexed) {
               <div class="cart__item__content__settings">
                 <div class="cart__item__content__settings__quantity">
                   <p>Qté : </p>
-                  <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${choix.quantity}">
+                  <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${choice.quantity}">
                 </div>
                 <div class="cart__item__content__settings__delete">
                   <p class="deleteItem" data-id="${choice._id}" data-couleur="${choice.color}">Supprimer</p>
@@ -79,7 +79,7 @@ function display(indexed) {
     On remplace les virgules de jonctions des objets du tableau par un vide
     On reste à l'écoute des modifications de quantité pour l'affichage et pour actualiser les données  */
     
-// Fonction changeQuantité on modifie dynamiquement les quantités du panier
+// Fonction "changeQuantity" on modifie dynamiquement les quantités du panier
 
 function changeQuantity() {
     const cart = document.querySelectorAll(".cart__item");

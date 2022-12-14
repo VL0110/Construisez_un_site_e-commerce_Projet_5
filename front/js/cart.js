@@ -136,7 +136,7 @@ function delet() {
     });
   }
 
-    /* Déclaration de variables + Pour chaque élément cartdelete +
+    /* Déclaration de variables pour chaque élément cartdelete +
     On écoute s'il y a un clic dans l'article concerné + Appel de la ressource du « localStorage » +
     Déclaration de variable utile pour la suppression + Création d'un tableau miroir +
     Suppression d’un élément à l'indice num + Affichage informatif +
@@ -159,13 +159,210 @@ function totalProduct() {
   }
 
      /* Déclaration variable en tant que nombre +
-      On pointe l'élément +
-      Pour chaque élément cart on  récupère les quantités des produits grâce au dataset +
+    Pour chaque élément cart on  récupère les quantités des produits grâce au dataset +
      On créer un opérateur pour le total produit grâce au dataset +
      On pointe l'endroit d'affichage nombre d'article +
-     On créer un opérateur pour le total produit grâce au dataset
      On pointe l'endroit d'affichage du prix total */
 
+      // Récupération des éléments du formulaire
+
+ if (page.match("cart")) {
+  let customerContact = {};
+  localStorage.customerContact = JSON.stringify(customerContact);
+  let firstName = document.querySelector("#firstName");
+  firstName.classList.add("regex_text");
+  let lastName = document.querySelector("#lastName");
+  lastName.classList.add("regex_text");
+  let city = document.querySelector("#city");
+  city.classList.add("regex_text");
+  let adress = document.querySelector("#address");
+  adress.classList.add("regex_adress");
+  let email = document.querySelector("#email");
+  email.classList.add("regex_email");
+  let regexText = document.querySelectorAll(".regex_text");
+  document.querySelector("#email").setAttribute("type", "text");
+}
+    /* Les données seront stockées dans ce tableau pour la commande sur page panier +
+    On pointe des éléments input, on attribue à certains la même classe, ils réagiront pareil aux différentes regex +
+    On pointe les input nom, prénom, ville, adresse, email + On pointe les élément qui ont la classe .regex_text +
+    */
+
+ // Expréssions régulières Regex
+
+    let regexLetter = /^[a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ\s-]{1,31}$/i;
+    let regexNumberLetter = /^[a-z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ\s-]{1,60}$/i;
+    let regexValidEmail = /^[a-z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]{1,60}$/i;
+    let regexMatchEmail = /^[a-zA-Z0-9æœ.!#$%&’*+/=?^_`{|}~"(),:;<>@[\]-]+@([\w-]+\.)+[\w-]{2,4}$/i;
+    
+
+  /* "/^" Indique le début regex qui valide les caratères « a-záàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ » + espaces blancs + tiret \s- + valeur comprise entre 1 et 31 +
+  On termine la regex $/i en indiquant que les éléments sélectionnés ne sont pas sensible à la case +
+ "/^" début regex qui valide les caractères chiffre lettre et caractères spéciaux « a-z0-9áàâäãåçéèêëíìîïñóòôöõúùûüýÿæœ » + espaces blancs + tiret \s- + valeur comprise entre 1 et 60 caractères +
+  On termine la regex $/i en indiquant que les éléments sélectionnés ne sont pas sensible à la case */
+
+  // Attribution de point si les champs sont validés pour "text"
+
+   if (page.match("cart")) {
+    regexText.forEach((regexText) =>
+      regexText.addEventListener("input", (e) => {
+        value = e.target.value;
+        let regexNormal = value.search(regexLetter);
+        if (regexNormal === 0) {
+          customerContact.firstName = firstName.value;
+          customerContact.lastName = lastName.value;
+          customerContact.city = city.value;
+        }
+        if (
+          customerContact.city !== "" &&
+          customerContact.lastName !== "" &&
+          customerContact.firstName !== "" &&
+          regexNormal === 0
+        ) {
+          customerContact.regexNormal = 3;
+        } else {
+          customerContact.regexNormal = 0;
+        }
+        localStorage.customerContact = JSON.stringify(customerContact);
+        colorRegex(regexNormal, value, regexText);
+        validClic();
+      })
+    );
+  }
+
+  /* « Value » sera la valeur de l'input en dynamique +
+   « regexNormal » sera la valeur de la réponse regex, 0 ou -1 */
+
+// Le champ écouté avec le regexLetter fera réagir la zone concernée grâce à "textInfo"
+
+textInfo(regexLetter, "#firstNameErrorMsg", firstName);
+textInfo(regexLetter, "#lastNameErrorMsg", lastName);
+textInfo(regexLetter, "#cityErrorMsg", city);
+
+  // Attribution de point si les champs sont validés pour "adress"
+
+  if (page.match("cart")) {
+    let regexAdress = document.querySelector(".regex_adress");
+    regexAdress.addEventListener("input", (e) => {
+      value = e.target.value;
+      let regexAdress = value.search(regexNumberLetter);
+      if (regexAdress == 0) {
+        customerContact.address = adress.value;
+      }
+      if (customerContact.address !== "" && regexAdress === 0) {
+        customerContact.regexAdress = 1;
+      } else {
+        customerContact.regexAdress = 0;
+      }
+      localStorage.customerContact = JSON.stringify(customerContact);
+      colorRegex(regexAdress, value, regexAdress);
+      validClic();
+    });
+  }
+
+  /* « Value » sera la valeur de l'input en dynamique +
+   « regexNormal » sera la valeur de la réponse regex, 0 ou -1 */
+
+// Le champ écouté avec le regexLetter fera réagir la zone concernée grâce à "textInfo"
+
+texteInfo(regexNumberLetter, "#addressErrorMsg", adress);
+
+  // Attribution de point si les champs sont validés pour "email"
+
+  if (page.match("cart")) {
+    let regexEmail = document.querySelector(".regex_email");
+    regexEmail.addEventListener("input", (e) => {
+      value = e.target.value;
+      let regexMatch = value.match(regexMatchEmail);
+      let regexValid = value.search(regexValidEmail);
+      if (regexValid === 0 && regexMatch !== null) {
+        customerContact.email = email.value;
+        customerContact.regexEmail = 1;
+      } else {
+        customerContact.regexEmail = 0;
+      }
+      localStorage.customerContact = JSON.stringify(customerContact);
+      colorRegex(regexValid, value, regexEmail);
+      validClic();
+    });
+  }
+
+      /* "value" sera la valeur de l'input +
+      L'adresse doit avoir cette forme pour la valider +
+      Quand le résultat sera correct, le console log affichera une autre réponse que null; "regexValid" sera la valeur de la réponse regex, 0 ou -1 */
+
+   // Texte sous le champ email
+   
+   if (page.match("cart")) {
+    email.addEventListener("input", (e) => {
+      value = e.target.value;
+      let regexMatch = value.match(regexMatchEmail);
+      let regexValid = value.search(regexValidEmail);
+
+      if (value === "" && regexMatch === null) {
+        document.querySelector("#emailErrorMsg").textContent = "Veuillez renseigner votre email.";
+        document.querySelector("#emailErrorMsg").style.color = "white";
+      } else if ( regexValid !== 0) {
+        document.querySelector("#emailErrorMsg").innerHTML = "Caractères non valide";
+        document.querySelector("#emailErrorMsg").style.color = "white";
+      } else if (value != "" && regexMatch == null) {
+        document.querySelector("#emailErrorMsg").innerHTML = "Caractères acceptés pour ce champ. Email non conforme";
+        document.querySelector("#emailErrorMsg").style.color = "white";
+      } else {
+        document.querySelector("#emailErrorMsg").innerHTML = "Email conforme.";
+        document.querySelector("#emailErrorMsg").style.color = "white";
+      }
+    });
+  }
+    /* Le « value » sera la valeur de l'input +
+    Si la valeur est toujours un string vide et la regex différente de 0 (regex à -1 et le champ est vide mais pas d'erreur) +
+    Si la valeur n'est plus un string vide et le regex différent de 0 (regex à -1 et le champ n'est pas vide donc il y a une erreur) +
+    Pour le reste des cas (quand le regex ne décèle aucune erreur et est à 0 peu importe le champ vu qu'il est validé par le regex) */
+
+// Fonction « colorRegex » qui modifiera la couleur de l'input par remplissage tapé pour l’accessibilité
+
+let listenValue = "";
+function colorRegex(regexSearch, listenValue, inputAction) {
+  if (listenValue === "" && regexSearch != 0) {
+    inputAction.style.backgroundColor = "white";
+    inputAction.style.color = "black";
+  } else if (listenValue !== "" && regexSearch != 0) {
+    inputAction.style.backgroundColor = "rgb(220, 50, 50)";
+    inputAction.style.color = "white";
+  } else {
+    inputAction.style.backgroundColor = "rgb(0, 138, 0)";
+    inputAction.style.color = "white";
+  }
+}
+    /* On détermine une valeur de départ à « value » qui sera un string +
+    Fonction à 3 arguments réutilisable, le regex, la valeur d'écoute, et la réponse à l'écoute +
+    Si la valeur est toujours un string vide et le regex différent de 0 (regex à -1 et le champ est vide mais pas d'erreur) +
+    Si la valeur n'est plus un string vide et le regex différent de 0 (regex à -1 et le champ n'est pas vide donc il y a une erreur) +
+    Pour le reste des cas (quand le regex ne décèle aucune erreur et est à 0 peu importe le champ vu qu'il est validé par le regex) */
 
 
-      
+    // Fonction d’affichage individuel sous l’input (sauf pour l’email)
+
+    function textInfo(regex, score, listenArea) {
+      if (page.match("cart")) {
+      listenArea.addEventListener("input", (e) => {
+      value = e.target.value;
+      index = value.search(regex);
+      if (value === "" && index != 0) {
+        document.querySelector(score).textContent = "Veuillez renseigner ce champ.";
+        document.querySelector(score).style.color = "white";
+      } else if (valeur !== "" && index != 0) {
+        document.querySelector(score).innerHTML = "Reformulez cette donnée";
+        document.querySelector(score).style.color = "white";
+      } else {
+      document.querySelector(score).innerHTML = "Caractères acceptés pour ce champ.";
+      document.querySelector(score).style.color = "white";
+      }
+    });
+  }
+  }
+      /* « value » sera la valeur de l'input +
+     Si la valeur est toujours un string vide et le regex différent de 0 (regex à -1 et le champ est vide mais pas d'erreur) +
+     Si la valeur n'est plus un string vide et le regex différent de 0 (regex à -1 et le champ n'est pas vide donc il y a une erreur) +
+     Pour le reste des cas (quand le regex ne décèle aucune erreur et est à 0 peu importe le champ vu qu'il est validé par le regex) */
+  
+     

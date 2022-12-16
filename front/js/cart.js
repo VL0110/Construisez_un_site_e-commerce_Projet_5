@@ -82,7 +82,7 @@ function display(indexed) {
 // Fonction "changeQuantity" on modifie dynamiquement les quantités du panier
 
 function changeQuantity() {
-    const cart = document.querySelectorAll(".cart__item");
+    const cart = document.querySelectorAll(".cart__items");
     cart.forEach((cart) => {0
       cart.addEventListener("change", (eq) => {
         let cart = JSON.parse(localStorage.getItem("stockCart"));
@@ -111,7 +111,7 @@ function changeQuantity() {
 // fonction "delet" on supprime un article du panier 
 
 function delet() {
-    const cartdelet = document.querySelectorAll(".cart__item .deleteItem");
+    const cartdelet = document.querySelectorAll(".cart__items .deleteItem");
     cartdelet.forEach((cartdelet) => {
       cartdelet.addEventListener("click", () => {
         let cart = JSON.parse(localStorage.getItem("stockCart"));
@@ -149,7 +149,7 @@ function delet() {
 function totalProduct() {
     let totalItem = 0;
     let totalPrice = 0; 
-    const cart = document.querySelectorAll(".cart__item");
+    const cart = document.querySelectorAll(".cart__items");
     cart.forEach((cart) => {
       totalItem  += JSON.parse(cart.dataset.quantity);
       totalPrice += cart.dataset.quantity * cart.dataset.price;
@@ -167,19 +167,19 @@ function totalProduct() {
       // Récupération des éléments du formulaire
 
  if (page.match("cart")) {
-  let customerContact = {};
+  var customerContact = {};
   localStorage.customerContact = JSON.stringify(customerContact);
-  let firstName = document.querySelector("#firstName");
+  var firstName = document.querySelector("#firstName");
   firstName.classList.add("regex_text");
-  let lastName = document.querySelector("#lastName");
+  var lastName = document.querySelector("#lastName");
   lastName.classList.add("regex_text");
-  let city = document.querySelector("#city");
+  var city = document.querySelector("#city");
   city.classList.add("regex_text");
-  let adress = document.querySelector("#address");
+  var adress = document.querySelector("#address");
   adress.classList.add("regex_adress");
-  let email = document.querySelector("#email");
+  var email = document.querySelector("#email");
   email.classList.add("regex_email");
-  let regexText = document.querySelectorAll(".regex_text");
+  var regexText = document.querySelectorAll(".regex_text");
   document.querySelector("#email").setAttribute("type", "text");
 }
     /* Les données seront stockées dans ce tableau pour la commande sur page panier +
@@ -264,7 +264,7 @@ textInfo(regexLetter, "#cityErrorMsg", city);
 
 // Le champ écouté avec le regexLetter fera réagir la zone concernée grâce à "textInfo"
 
-texteInfo(regexNumberLetter, "#addressErrorMsg", adress);
+textInfo(regexNumberLetter, "#addressErrorMsg", adress);
 
   // Attribution de point si les champs sont validés pour "email"
 
@@ -365,4 +365,115 @@ function colorRegex(regexSearch, listenValue, inputAction) {
      Si la valeur n'est plus un string vide et le regex différent de 0 (regex à -1 et le champ n'est pas vide donc il y a une erreur) +
      Pour le reste des cas (quand le regex ne décèle aucune erreur et est à 0 peu importe le champ vu qu'il est validé par le regex) */
   
-     
+     // Fonction de validation d'accès au clic du bouton formulaire 
+
+     let order = document.querySelector("#order");
+function validClic() {
+  let contactRef = JSON.parse(localStorage.getItem("customerContact"));
+  let amount = contactRef.regexNormal + contactRef.regexAdress + contactRef.regexEmail;
+  if (amount === 5) {
+    order.removeAttribute("disabled", "disabled");
+    document.querySelector("#order").setAttribute("value", "Commander !");
+  } else {
+    order.setAttribute("disabled", "disabled");
+    document.querySelector("#order").setAttribute("value", "Remplir le formulaire");
+  }
+}
+
+// Envoie de la commande
+
+   if (page.match("cart")) {
+     order.addEventListener("click", (e) => {
+      e.preventDefault();
+      validClic();
+      sendPacket();
+    });
+  }
+
+  // Empêche de recharger la page on prévient le "reload" du bouton
+
+  // Fonction récupérations des id et insertion des données dans un tableau
+
+  let cartId = [];
+function tableId() {
+let cart = JSON.parse(localStorage.getItem("stockCart"));
+if (cart && cart.length > 0) {
+  for (let index of cart) {
+    cartId.push(index._id);
+  }
+} else {
+  console.log("Le panier est vide");
+  document.querySelector("#order").setAttribute("value", "Panier vide!");
+}
+}
+
+   /* Définition du panier qui comportera les id des produits choisi du local storage +
+   Appel des ressources + Récupération des id produits dans « cartId » */
+
+ // Récupération données clients et panier avant transformation
+
+ let contactRef;
+let finalOrder;
+function packet() {
+  contactRef = JSON.parse(localStorage.getItem("customerContact"));
+  finalOrder = {
+    contact: {
+      firstName: contactRef.firstName,
+      lastName: contactRef.lastName,
+      address: contactRef.address,
+      city: contactRef.city,
+      email: contactRef.email,
+    },
+    products: cartId,
+  };
+}
+
+  // Fonction validation de l'envoi
+
+  function sendPacket() {
+    tableId();
+    packet();
+    console.log(finalOrder);
+    let amount = contactRef.regexNormal + contactRef.regexAdress + contactRef.regexEmail;
+    if (cartId.length != 0 && amount === 5) {
+      fetch("http://localhost:3000/api/products/order", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(finalOrder),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          window.location.href = `/front/html/confirmation.html?commande=${data.orderId}`;
+        })
+        .catch(function (err) {
+          console.log(err);
+          alert("erreur");
+        });
+    }
+  }
+
+       /* Vision sur le paquet que l'on veut envoyer +
+      Si le « cartId » contient des articles et que le clic est autorisé + Envoi à la ressource api + 
+      Envoyé à la page confirmation, autre écriture de la valeur "./confirmation.html?commande=${data.orderId}" */
+
+   // Fonction affichage invoqué du numéro de commande et vide du storage (sur page confirmation)
+
+      (function Order() {
+        if (page.match("confirmation")) {
+          sessionStorage.clear();
+          localStorage.clear();
+          let orderNum = new URLSearchParams(document.location.search).get("order");
+          document.querySelector("#orderId").innerHTML = `<br>${orderNum}<br>Merci pour votre achat`;
+          console.log("valeur de l'orderId venant de l'url: " + orderNum);
+          orderNum = undefined;
+        } else {
+          console.log("Page cart");
+        }
+      })();
+    
+   /* Valeur du numéro de commande + 
+   Merci et mise en page + 
+   Réinitialisation du numéro de commande */

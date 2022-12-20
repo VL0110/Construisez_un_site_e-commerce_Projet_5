@@ -1,35 +1,49 @@
-// Intégration des produits de l'API 
+// Page Accueil
 
-fetch("http://localhost:3000/api/products")
-.then((response) => 
-response.json()
-.then((objectProducts) => { 
-    console.table(objectProducts); 
-    Kanaps(objectProducts);}))
-    .catch((err) => {
-      document.querySelector(".titles").innerHTML = "<h1>erreur 404</h1>";
-      console.log("erreur 404, sur ressource api:" + err);
-    });
+// URL des API stocké dans une variable
 
-/* Obtient la réponse en json + 
-Nom des données json traités "objectProducts" + 
-Informations récupérées sous forme de tableau +
-Appel de la fonction d'affichage des produits +
-Dans le cas d'une erreur remplace le contenu de titre par un h1 au contenu de erreur 404 et renvoit en console l'erreur.*/
+const apiURL = "http://localhost:3000/api/products";
 
-  function Kanaps(index) { 
-    let zoneArticle = document.querySelector("#items");
-    for (let article of index) {
-        zoneArticle.innerHTML += `<a href="./product.html?_id=${article._id}">
-    <article>
-      <img src="${article.imageUrl}" alt="${article.altTxt}">
-      <h3 class="productName">${article.name}</h3>
-      <p class="productDescription">${article.description}</p>
-    </article>
-  </a>`;
-  }
+// Appel à l'API products
+
+async function fetchData() {
+    try {
+        const res = await fetch(apiURL);
+        if (res.ok) {
+            const data = await res.json();
+            return displayProducts(data);
+        } else {
+            throw new Error("Erreur de chargement");
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
 }
-    /* définir une zone d'article à partir de l'id de l'index html pour les articles + 
-Prise en considération des valeurs pour chacun des articles + 
-Modification de la zone d'article en prenant les informations contenus dans la partie html <article>
- en ajoutant un $ pour signifier le type d'élément à récupérer dans la fiche produit*/
+
+// Récupération des données et intégration dans le DOM
+
+function displayProducts(items) {
+    for (let item of items) {
+     let productLink = document.createElement("a");
+        productLink.setAttribute("href", `product.html?id=${item._id}`);
+        document.querySelector("#items").appendChild(productLink);
+     let productArticle = document.createElement("article");
+        productLink.appendChild(productArticle);
+     let productImg = document.createElement("img");
+        productImg.setAttribute("src", item.imageUrl);
+        productImg.setAttribute("alt", item.altTxt);
+        productArticle.appendChild(productImg);
+     let productTitle = document.createElement("h3");
+        productTitle.classList.add("productName");
+        productTitle.textContent = item.name;
+        productArticle.appendChild(productTitle);
+      let productDescription = document.createElement("p");
+        productDescription.classList.add("productDescription");
+        productDescription.textContent = item.description;
+        productArticle.appendChild(productDescription);
+    }
+}
+
+fetchData();
+
+// console.log(item) + Insertion de l'élément "a" (item), "article", "img", "h3" (name), et "p"(alt text)

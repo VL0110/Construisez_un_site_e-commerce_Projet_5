@@ -94,9 +94,9 @@ function checkCart() {
 function addToCart(productDetails) {
     let productsInLocalStorage = JSON.parse(localStorage.getItem("cartItems"));
     const popupConfirmation = function () {
-        if (
-            confirm(
-                "Produit ajouté au panier !\nPour consulter votre panier, Cliquez sur OK !"
+    if (
+        confirm(
+            "Produit ajouté au panier !\nPour consulter votre panier, Cliquez sur OK !"
             )
         ) {
             window.location.href = "cart.html";
@@ -121,6 +121,8 @@ function addToCart(productDetails) {
     }
     localStorage.setItem("cartItems", JSON.stringify(productsInLocalStorage));
     popupConfirmation();
+    document.querySelector("#addToCart").style.color = "rgb(0, 205, 0)";
+    document.querySelector("#addToCart").textContent = "Produit ajouté !";
 }
 getProduct();
 

@@ -43,7 +43,6 @@ function displayProducts(items) {
         productArticle.appendChild(productDescription);
     }
 }
-
 fetchData();
 
 // console.log(item) + Insertion de l'élément "a" (item), "article", "img", "h3" (name), et "p"(alt text)

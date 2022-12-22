@@ -8,7 +8,7 @@ let params = new URL(document.location).searchParams;
 
 let productId = params.get("id");
 
-// Fonction de récupération des données de l'API avec l'id du Produit 
+// Fonction de récupération des données de l'API avec l'id du produit 
 
 async function getProduct() {
     try {
@@ -19,7 +19,7 @@ async function getProduct() {
             const data = await res.json();
             return displaySelectedProduct(data);
         } else {
-            throw new Error("Erreur de 404");
+            throw new Error("Erreur de chargement");
         }
     } catch (error) {
         console.log(error.message);
@@ -96,11 +96,11 @@ function addToCart(productDetails) {
     const popupConfirmation = function () {
     if (
         confirm(
-            "Produit ajouté au panier !\nPour consulter votre panier, Cliquez sur OK !"
+            "Produit ajouté au panier !\nPour revenir à l'accueil, Cliquez sur OK !"
             )
         ) {
-            window.location.href = "cart.html";
-        }
+            window.location.href = "index.html";
+        } 
     };
     if (productsInLocalStorage) {
         const resultFind = productsInLocalStorage.find(function (product) {
@@ -119,10 +119,10 @@ function addToCart(productDetails) {
         productsInLocalStorage = [];
         productsInLocalStorage.push(productDetails);
     }
-    localStorage.setItem("cartItems", JSON.stringify(productsInLocalStorage));
-    popupConfirmation();
     document.querySelector("#addToCart").style.color = "rgb(0, 205, 0)";
     document.querySelector("#addToCart").textContent = "Produit ajouté !";
+    localStorage.setItem("cartItems", JSON.stringify(productsInLocalStorage));
+    popupConfirmation();
 }
 getProduct();
 
@@ -135,3 +135,4 @@ getProduct();
        Si le panier contient des produits différents +
        Si le panier est vide +
        Objet Javascprit transformé en JSON StringObjet Javascprit transformé en JSON String  */
+

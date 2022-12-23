@@ -1,9 +1,16 @@
+// Récupération de la chaîne de requête dans l'URL et Extraction de l'orderId (numéro de commande) de l'URL 
 
-function commandConfirmed() {
-    const idOrder = document.getElementById("orderId");
-    idOrder.innerText = localStorage.getItem("orderId");
-    localStorage.clear();
-    let orderNum = new URLSearchParams(document.location.search).get("order");
-    document.querySelector("#orderId").innerHTML = `<br>${orderNum}<br>Merci pour votre achat`;
-    orderNum = undefined;
+const urlOrderId = new URLSearchParams(window.location.search).get("orderId");
+if(urlOrderId === null || urlOrderId === ""){
+    alert ("Une erreur s'est produite lors de la validation de votre commande. Veuillez nous en excuser !");
+    window.location.href = "index.html";
+ }
+ else{
+    const idCommande = document.getElementById("orderId");
+    idCommande.innerText = urlOrderId;
 }
+
+/* S'il n'y a pas d'orderId dans l'URL alors on redirige sur la page d'accueil du site +
+Sinon, on affiche la confirmation de la commande et le numéro de commande +
+Sélection de l'élément html dans lequel on veut afficher le numéro de commande +
+On insère le numéro de commande dans le html */

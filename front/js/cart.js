@@ -116,10 +116,6 @@ async function grandTotal() {
             article.price * productsInLocalStorage[product].quantity
         );
     }
-    if (totalQuantity > 100) {
-        msgError += "La quantité total et maximum autorisé est de 100.\r\n";
-        error = true;
-    }
 document.getElementById("totalQuantity").textContent = totalQuantity;
 document.getElementById("totalPrice").textContent = totalPrice;
 }

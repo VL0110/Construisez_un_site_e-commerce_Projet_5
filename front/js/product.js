@@ -79,6 +79,10 @@ function checkCart() {
         msgError += "Veuillez ne pas saisir de valeur négative!\r\n";
         error = true;
     }
+    else if (checkQuantityLS(productDetails)) {
+        msgError += "La quantité total pour un même produit et à la même couleur ne doit pas dépasser 100\r\n";
+        error = true;
+    }
     if (error) {
         alert(msgError);
         return;
@@ -130,9 +134,44 @@ getProduct();
        JSON String transformé en Objet Javascript +
        Fenêtre pop-up de confirmation d'ajout du produit au panier et de redirection +
        Importation dans le local storage : 
-       Si le panier contient déjà au moins 1 article de même id et même couleur
-       Si c'est le cas, incrémenter la quantité du produit en question
+       Si le panier contient déjà au moins 1 article de même id et même couleur +
+       Si c'est le cas, incrémenter la quantité du produit en question +
        Si le panier contient des produits différents +
        Si le panier est vide +
        Objet Javascprit transformé en JSON StringObjet Javascprit transformé en JSON String  */
 
+// Fonction checkQuantityLS (condition de quantité pour plusieurs produits -100)
+
+       function checkQuantityLS(productDetails){
+        let productsInLocalStorage = JSON.parse(localStorage.getItem("cartItems"));
+        if (productsInLocalStorage) {
+            const resultFind = productsInLocalStorage.find(function (product) {
+                return (
+                    product.id === productDetails.id &&
+                    product.color === productDetails.color
+                );
+            });
+            if (resultFind) {
+                let updateQuantity = productDetails.quantity + resultFind.quantity;
+            if (updateQuantity > 100){
+            return true
+            }
+            else {
+            return false
+            }
+            } else {
+            return false
+            }
+       }
+       else {
+        return false
+       }
+    }
+
+
+
+    /* Récupération des produits du LocalStorage + 
+       JSON String transformé en Objet Javascript +
+       Si le panier contient déjà au moins 1 article de même id et même couleur +
+       Si c'est le cas, incrémenter la quantité du produit en question +
+       Si la quantité produit est inférieur à 100 */

@@ -1,6 +1,6 @@
 // Page Accueil
 
-// URL des API stocké dans une variable
+// URL des API stockées dans une variable
 
 const apiURL = "http://localhost:3000/api/products";
 

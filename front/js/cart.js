@@ -148,8 +148,8 @@ async function singleProductPrice(dataId, dataColor, productPrice) {
 }
 
 /* Récupération des produits du localStorage + variable price crée (initialisée à 0) + Appel de la fonction "getProductDetails" pour récupérer les infos de l'api (prix)
-Boucle for pour parcourir tous les produits présent dans le localStorage + Si le panier (localStorage) contient déja un article (de même id et couleur) +
-Variable "price" remplacée par un nouveau prix en fonction de sa quantité + Récupération prix et contenu textuel changé par la valeur de la variable price */
+Boucle for pour parcourir tous les produits présents dans le localStorage + Si le panier (localStorage) contient déjà un article (de même id et couleur) +
+Variable "price" remplacée par un nouveau prix en fonction de sa quantité + Récupération prix et contenu textuel changé par la valeur de la variable "price" */
 
 
 // Fonction qui gère la modification de la quantité
@@ -174,7 +174,7 @@ function changeQuantity() {
                 return item;
             });
 
-// Conditions permettant de vérifer la quantité renseignée
+// Conditions permettant de vérifier la quantité renseignée
 
     if (!Number.isInteger(inputValue)) {
         alert(
@@ -336,7 +336,7 @@ function form() {
     });
     let order = document.getElementById("order");
 
-// Ecouter le bouton commander
+// Écouter le bouton commander
 
     order.addEventListener("click", function (event) {
         event.preventDefault();
@@ -355,7 +355,7 @@ function form() {
         email: email.value,
         };
 
-// Dans le cas où l'envoi du formulaire de contact est vide
+// Dans le cas où l'envoi du formulaire de contact serait vide
 
     if (
         firstName.value === "" ||
@@ -367,7 +367,7 @@ function form() {
         alert("Vous devez renseigner tous les champs pour passer la commande !");
         }
 
-// Dans le cas où un des champs ne correspond pas aux condition exigés
+// Dans le cas où un des champs ne correspondrait pas aux conditions exigées
 
     else if (
         regexLetter.test(firstName.value) == false ||

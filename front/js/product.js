@@ -1,4 +1,4 @@
-// Page produit
+// Page Produit
 
 // Récupération url + paramètre
 
